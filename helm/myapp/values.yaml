@@ -39,7 +39,7 @@ frontend:
   image:
     repository: nikitagaponov/todo-front
     tag: "latest" # переопределяется в values-production.yaml
-  port: 80
+  port: 8080
   replicaCount: 1 # single-node
   resources:
     requests:
