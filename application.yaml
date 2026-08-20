@@ -3,32 +3,31 @@
 #
 # postgres здесь НЕТ — он ставится вручную helm install (см. README, решение грилла 9).
 #
-# ЗАПОЛНИ: repoURL (HTTPS-адрес ТВОЕГО ПУБЛИЧНОГО gitops-репо).
 # Репо публичный (секреты зашифрованы SOPS) — ArgoCD читает его по HTTPS без ключей.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: myapp
-  namespace: argocd            # namespace самого ArgoCD (всегда argocd)
+  namespace: argocd # namespace самого ArgoCD (всегда argocd)
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    name: in-cluster           # тот же кластер, где стоит ArgoCD
-    namespace: default         # namespace приложения
+    name: in-cluster # тот же кластер, где стоит ArgoCD
+    namespace: homework # namespace приложения
   source:
-    repoURL: "https://github.com/ВАШ_ЛОГИН/devops-gitops.git"
+    repoURL: "https://github.com/nikcan/devops-gitops.git"
     targetRevision: HEAD
     path: "helm/myapp"
     helm:
       valueFiles:
         - values.yaml
         - values-production.yaml
-        - secrets.yaml          # зашифрован SOPS; helm-secrets в repoServer расшифрует
+        - secrets.yaml # зашифрован SOPS; helm-secrets в repoServer расшифрует
   project: default
   syncPolicy:
     automated:
-      prune: true              # удалять из кластера то, что исчезло из git
-      selfHeal: true           # откатывать ручные kubectl-правки к состоянию git
+      prune: true # удалять из кластера то, что исчезло из git
+      selfHeal: true # откатывать ручные kubectl-правки к состоянию git
     syncOptions:
       - CreateNamespace=true

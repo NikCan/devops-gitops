@@ -1,9 +1,7 @@
 # Базовые значения чарта myapp. Секреты (DB_USER/DB_PASSWORD) — в secrets.yaml (SOPS).
 # Теги образов переопределяются в values-production.yaml (их бампает CI).
 #
-# ЗАПОЛНИ: ВАШ_ЛОГИН (Docker Hub) и ВАШ_ДОМЕН (тот же, что в hw3/hw6).
-
-namespace: default
+namespace: homework
 
 image:
   # imagePullSecrets — доступ к приватным образам на Docker Hub. Secret dockerhub-cred
@@ -13,12 +11,12 @@ image:
 backend:
   name: backend
   image:
-    repository: ВАШ_ЛОГИН/todo-back
-    tag: "latest"          # переопределяется в values-production.yaml (бампает CI на sha-<sha>)
+    repository: nikitagaponov/todo-back
+    tag: "latest" # переопределяется в values-production.yaml (бампает CI на sha-<sha>)
   port: 3000
-  replicaCount: 1          # single-node: 2 реплики сядут на ту же ноду + не влезают в 2 CPU с ArgoCD
+  replicaCount: 1 # single-node: 2 реплики сядут на ту же ноду + не влезают в 2 CPU с ArgoCD
   probes:
-    health: /health        # у backend НЕТ префикса /api — роуты в корне
+    health: /health # у backend НЕТ префикса /api — роуты в корне
     ready: /ready
   resources:
     requests:
@@ -39,10 +37,10 @@ backend:
 frontend:
   name: frontend
   image:
-    repository: ВАШ_ЛОГИН/todo-front
-    tag: "latest"          # переопределяется в values-production.yaml
+    repository: nikitagaponov/todo-front
+    tag: "latest" # переопределяется в values-production.yaml
   port: 80
-  replicaCount: 1          # single-node
+  replicaCount: 1 # single-node
   resources:
     requests:
       cpu: "50m"
@@ -57,9 +55,9 @@ envs:
   configMap:
     NODE_ENV: "production"
     PORT: "3000"
-    DB_HOST: "postgres"    # имя Headless Service из чарта postgres
+    DB_HOST: "postgres" # имя Headless Service из чарта postgres
     DB_PORT: "5432"
-    DB_NAME: "todo"        # совпадает с dbName в чарте postgres
+    DB_NAME: "todo" # совпадает с dbName в чарте postgres
     CORS_ORIGIN: ""
 
 # Runtime-конфиг приложения → ConfigMap backend-appconfig, монтируется в
@@ -68,7 +66,7 @@ appConfig:
   maxTodos: 5
 
 ingress:
-  host: ВАШ_ДОМЕН
+  host: hw.nik-can-dev.quest
   tlsSecret: app-tls
   clusterIssuer: letsencrypt-prod
 

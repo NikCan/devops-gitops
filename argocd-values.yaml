@@ -5,9 +5,6 @@
 #  - repoServer с плагином helm-secrets + age-ключом расшифровывает secrets:// при рендере
 #  - сервисный аккаунт github-actions (для CI: argocd app sync)
 #  - server за ingress-nginx с TLS (cert-manager)
-#
-# ЗАПОЛНИ: argocd.ВАШ_ДОМЕН.
-# ⚠️  Версия чарта и точные ключи ingress валидируются на живом прогоне (см. 00-design.md).
 
 applicationSet:
   replicas: 1
@@ -142,7 +139,7 @@ server:
   ingress:
     enabled: true
     ingressClassName: nginx
-    hostname: argocd.ВАШ_ДОМЕН
+    hostname: argocd.nik-can-dev.quest
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/backend-protocol: HTTP
