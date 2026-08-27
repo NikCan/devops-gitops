@@ -4,17 +4,16 @@
 namespace: homework
 
 image:
-  # imagePullSecrets — доступ к приватным образам на Docker Hub. Secret dockerhub-cred
-  # создаётся отдельно (kubectl), см. README.
-  pullSecret: dockerhub-cred
+  # Zero-Secret: очищаем pullSecret (ноды в YC скачивают образы через IAM-роль)
+  pullSecret: ""
 
 backend:
   name: backend
   image:
-    repository: nikitagaponov/todo-back
+    repository: cr.yandex/crpm45aocrdi7tmp24hf/todo-back
     tag: "latest" # переопределяется в values-production.yaml (бампает CI на sha-<sha>)
   port: 3000
-  replicaCount: 1 # single-node: 2 реплики сядут на ту же ноду + не влезают в 2 CPU с ArgoCD
+  replicaCount: 2 # single-node: 2 реплики сядут на ту же ноду + не влезают в 2 CPU с ArgoCD
   probes:
     health: /health # у backend НЕТ префикса /api — роуты в корне
     ready: /ready
@@ -37,10 +36,10 @@ backend:
 frontend:
   name: frontend
   image:
-    repository: nikitagaponov/todo-front
+    repository: cr.yandex/crpm45aocrdi7tmp24hf/todo-front
     tag: "latest" # переопределяется в values-production.yaml
   port: 8080
-  replicaCount: 1 # single-node
+  replicaCount: 2 # single-node
   resources:
     requests:
       cpu: "50m"

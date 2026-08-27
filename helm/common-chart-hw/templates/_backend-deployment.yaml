@@ -21,8 +21,10 @@ spec:
         runAsNonRoot: {{ .Values.backend.securityContext.runAsNonRoot }}
         runAsUser: {{ .Values.backend.securityContext.runAsUser }}
         runAsGroup: {{ .Values.backend.securityContext.runAsGroup }}
+      {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
+      {{- end }}
       containers:
         - name: {{ .Values.backend.name }}
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
